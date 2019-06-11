@@ -25,6 +25,26 @@
                 android:layout_height="wrap_content">
 
             </ExpandableListView>-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                >
+                <TextView
+                    android:id="@+id/tv_commentTitlr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    />
+                <TextView
+                    android:id="@+id/tv_collectionTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:drawableLeft="@drawable/shoucang"
+                    android:gravity="center_vertical"
+
+                    android:text="收藏"/>
+            </RelativeLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_com"
                 android:layout_width="match_parent"
