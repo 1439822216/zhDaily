@@ -9,6 +9,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -76,6 +78,7 @@ public class WebActivity extends AppCompatActivity {
         web_content.getSettings().setSupportMultipleWindows(true);
         web_content.getSettings().setLoadWithOverviewMode(true);
         web_content.getSettings().setUseWideViewPort(true);
+
         web_content.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
