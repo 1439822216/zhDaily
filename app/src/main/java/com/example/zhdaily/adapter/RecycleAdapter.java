@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.drawerlayoutdemo.R;
-import com.example.drawerlayoutdemo.activity.WebActivity;
-import com.example.drawerlayoutdemo.bean.BeforeBean;
+import com.example.zhdaily.R;
+import com.example.zhdaily.activity.WebActivity;
+import com.example.zhdaily.bean.BeforeBean;
 
 import java.util.List;
 
