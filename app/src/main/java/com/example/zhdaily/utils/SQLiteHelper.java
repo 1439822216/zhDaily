@@ -18,7 +18,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         + "newId varchar, "
         + "title varchar, "
         + "image varchar, "
-        + "time varchar" + ")");
+        + "timedata varchar" + ")");
     }
 
     @Override
