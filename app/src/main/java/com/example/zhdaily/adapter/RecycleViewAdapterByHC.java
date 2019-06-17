@@ -14,50 +14,43 @@ import com.bumptech.glide.Glide;
 import com.example.zhdaily.R;
 import com.example.zhdaily.activity.WebActivity;
 import com.example.zhdaily.bean.BeforeBean;
+import com.example.zhdaily.bean.NewsBean;
 import com.example.zhdaily.bean.SQLBean;
-import com.example.zhdaily.utils.DBUtils;
 
 import java.util.List;
 
-public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHolder> {
+public class RecycleViewAdapterByHC extends RecyclerView.Adapter<RecycleViewAdapterByHC.MyViewHoider> {
+
     private Context context;
-    private List<BeforeBean.StoriesBean> list;
-    private DBUtils dbUtils;
+    private List<SQLBean> list;
 
-
-    public RecycleAdapter(Context context) {
+    public RecycleViewAdapterByHC(Context context,List<SQLBean> list){
         this.context = context;
-        dbUtils = DBUtils.getInstance(context);
-        notifyDataSetChanged();
-    }
-
-    public void setData(List<BeforeBean.StoriesBean> list){
         this.list = list;
         notifyDataSetChanged();
     }
-
-
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHoider onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_view,viewGroup,false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
+        RecycleViewAdapterByHC.MyViewHoider myViewHolder = new RecycleViewAdapterByHC.MyViewHoider(view);
         return myViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        BeforeBean.StoriesBean storiesBean = list.get(i);
-        myViewHolder.tv_title.setText(storiesBean.getTitle());
+    public void onBindViewHolder(@NonNull MyViewHoider myViewHoider, int i) {
+        SQLBean sqlBean = list.get(i);
+        myViewHoider.tv_title.setText(sqlBean.getTitle());
         Glide.with(context)
-               .load(storiesBean.getImages().get(0))
-               .into(myViewHolder.iv_image);
-        myViewHolder.tv_date.setText(storiesBean.getNewsDate());
-        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                .load(sqlBean.getImage())
+                .into(myViewHoider.iv_image);
+        myViewHoider.tv_date.setText(sqlBean.getTimedata());
+        myViewHoider.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean b = dbUtils.insertNew(new SQLBean(String.valueOf(storiesBean.getId()), storiesBean.getTitle(), storiesBean.getImages().get(0), storiesBean.getNewsDate()));
-
+                BeforeBean.StoriesBean storiesBean = new  BeforeBean.StoriesBean();
+                storiesBean.setId(Integer.parseInt(sqlBean.getNewId()));
+                storiesBean.setTitle(sqlBean.getTitle());
                 Intent intent = new Intent(context, WebActivity.class);
                 intent.putExtra("bean",storiesBean);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
@@ -71,15 +64,11 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
         return list.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    public class MyViewHoider extends RecyclerView.ViewHolder{
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
         private TextView tv_title,tv_date;
         private ImageView iv_image;
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHoider(@NonNull View itemView) {
             super(itemView);
             tv_title = itemView.findViewById(R.id.tv_title);
             iv_image = itemView.findViewById(R.id.iv_image);
