@@ -56,7 +56,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean b = dbUtils.insertNew(new SQLBean(String.valueOf(storiesBean.getId()), storiesBean.getTitle(), storiesBean.getImages().get(0), storiesBean.getNewsDate()));
+                boolean b = dbUtils.insertHe(new SQLBean(String.valueOf(storiesBean.getId()), storiesBean.getTitle(), storiesBean.getImages().get(0), storiesBean.getNewsDate()));
 
                 Intent intent = new Intent(context, WebActivity.class);
                 intent.putExtra("bean",storiesBean);

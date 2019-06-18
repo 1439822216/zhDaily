@@ -1,6 +1,8 @@
 package com.example.zhdaily.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
@@ -17,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.zhdaily.R;
@@ -24,7 +28,11 @@ import com.example.zhdaily.adapter.CommentsAdapter;
 import com.example.zhdaily.bean.BeforeBean;
 import com.example.zhdaily.bean.CommentsBean;
 import com.example.zhdaily.bean.LongBean;
+import com.example.zhdaily.bean.SQLBean;
 import com.example.zhdaily.bean.ShortBean;
+import com.example.zhdaily.fragment.CollectionFragment;
+import com.example.zhdaily.fragment.HomeFragment;
+import com.example.zhdaily.utils.DBUtils;
 import com.example.zhdaily.utils.OkHttpUtil;
 import com.example.zhdaily.utils.WebAdd;
 import com.google.gson.Gson;
@@ -53,11 +61,13 @@ public class WebActivity extends AppCompatActivity {
     List<CommentsBean> allList;//总集合
     CommentsAdapter commentsAdapter;
     TextView tv_commentTitlr,tv_collectionTitle;
+    DBUtils dbUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         initView();
+
         myHandle = new MyHandle();
         gson = new Gson();
         longComments = new ArrayList<>();
@@ -73,6 +83,15 @@ public class WebActivity extends AppCompatActivity {
         Intent data = getIntent();
         storiesBean = (BeforeBean.StoriesBean)data.getSerializableExtra("bean");
         id = storiesBean.getId()+"";
+
+        dbUtils =  DBUtils.getInstance(getApplicationContext());
+        boolean b = dbUtils.queryOneByColl(new SQLBean(id, null, null, null));
+        if(b){
+            tv_collectionTitle.setText("已收藏");
+            Drawable drawable = getResources().getDrawable(R.drawable.shoucangcheck);
+            tv_collectionTitle.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
+        }
+
         web_content.getSettings().setJavaScriptEnabled(true);
         web_content.getSettings().setDomStorageEnabled(true);
         web_content.getSettings().setSupportMultipleWindows(true);
@@ -107,6 +126,29 @@ public class WebActivity extends AppCompatActivity {
         //添加Android自带的分割线
         rv_com.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         rv_com.setAdapter(commentsAdapter);
+        tv_collectionTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tv_collectionTitle.getText().toString().equals("收藏")){
+                    boolean b1 = dbUtils.insertNewByColl(new SQLBean(String.valueOf(storiesBean.getId()), storiesBean.getTitle(), storiesBean.getImages().get(0), storiesBean.getNewsDate()));
+                    if(b1){
+                        tv_collectionTitle.setText("已收藏");
+                        Drawable drawable = getResources().getDrawable(R.drawable.shoucangcheck);
+                        tv_collectionTitle.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
+                        Toast.makeText(WebActivity.this, "已收藏", Toast.LENGTH_SHORT).show();
+                    }
+                }else if(tv_collectionTitle.getText().toString().equals("已收藏")){
+                    boolean b1 = dbUtils.deleteNewByColl(new SQLBean(String.valueOf(storiesBean.getId()), storiesBean.getTitle(), storiesBean.getImages().get(0), storiesBean.getNewsDate()));
+                    if(b1){
+                        tv_collectionTitle.setText("收藏");
+                        Drawable drawable = getResources().getDrawable(R.drawable.shoucang);
+                        tv_collectionTitle.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
+                    }
+                }
+                
+
+            }
+        });
     }
 
 
