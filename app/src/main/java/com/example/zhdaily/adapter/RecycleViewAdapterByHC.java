@@ -17,6 +17,7 @@ import com.example.zhdaily.bean.BeforeBean;
 import com.example.zhdaily.bean.NewsBean;
 import com.example.zhdaily.bean.SQLBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecycleViewAdapterByHC extends RecyclerView.Adapter<RecycleViewAdapterByHC.MyViewHoider> {
@@ -51,6 +52,10 @@ public class RecycleViewAdapterByHC extends RecyclerView.Adapter<RecycleViewAdap
                 BeforeBean.StoriesBean storiesBean = new  BeforeBean.StoriesBean();
                 storiesBean.setId(Integer.parseInt(sqlBean.getNewId()));
                 storiesBean.setTitle(sqlBean.getTitle());
+                storiesBean.setNewsDate(sqlBean.getNewId());
+                List<String> images = new ArrayList<>();
+                images.add(sqlBean.getImage());
+                storiesBean.setImages(images);
                 Intent intent = new Intent(context, WebActivity.class);
                 intent.putExtra("bean",storiesBean);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
