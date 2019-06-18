@@ -97,6 +97,8 @@ public class WebActivity extends AppCompatActivity {
         web_content.getSettings().setSupportMultipleWindows(true);
         web_content.getSettings().setLoadWithOverviewMode(true);
         web_content.getSettings().setUseWideViewPort(true);
+        web_content.getSettings().setAppCacheEnabled(true);//是否使用缓存
+        web_content.getSettings().setLoadsImagesAutomatically(true);//加载图片
 
         web_content.setWebViewClient(new WebViewClient(){
             @Override
